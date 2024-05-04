@@ -174,20 +174,6 @@ void enqueue(CircularQueue *queue, int16_t element) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void enqueueCFAR(CircularQueueCFAR *q, int16_t data) {
     if (isFullCFAR(q)) {
         // 如果队列已满，弹出队列头部的数据
@@ -335,21 +321,20 @@ void appMain() {
 
         vTaskDelay(M2T(10));
         int16_t accZ = logGetUint(logGetVarId("stateEstimateZ","az"));
-        // int16_t accX = logGetUint(logGetVarId("stateEstimateZ","ax"));
-        // int16_t gyroY = logGetUint(logGetVarId("gyro","yRaw"));
+        int16_t accX = logGetUint(logGetVarId("stateEstimateZ","ax"));
+        int16_t gyroY = logGetUint(logGetVarId("gyro","yRaw"));
         int16_t motor1 = logGetUint(logGetVarId("motor","m1s"));
         int16_t motor2 = logGetUint(logGetVarId("motor","m2s"));
         int16_t motor3 = logGetUint(logGetVarId("motor","m3s"));
         int16_t motor4 = logGetUint(logGetVarId("motor","m4s"));
-        
 
 
 
-        // enqueue(accZ_dataQueue, accZ);
-        // enqueue(gyroY_dataQueue, gyroY);
-        // enqueue(motor2_1_dataQueue, motor2 - motor1);
-        // enqueue(accX_dataQueue, accX);
-        // enqueue(motor3_1_dataQueue, motor3 - motor1);
+        enqueue(accZ_dataQueue, accZ);
+        enqueue(gyroY_dataQueue, gyroY);
+        enqueue(motor2_1_dataQueue, motor2 - motor1);
+        enqueue(accX_dataQueue, accX);
+        enqueue(motor3_1_dataQueue, motor3 - motor1);
 
 
 

@@ -151,31 +151,6 @@ int isEmpty10(CircularQueue10 *q) {
 }
 
 
-
-// void enqueue(CircularQueue *q, int16_t data) {
-//     if (isFull(q)) {
-//         // 如果队列已满，弹出队列头部的数据
-//         q->front = (q->front + 1) % QUEUE_SIZE;
-//         q->size--;
-//     }
-  
-//     q->data[q->rear] = data;
-    
-//     q->rear = (q->rear + 1) % QUEUE_SIZE;
-//     q->size++;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
 void enqueue(CircularQueue *queue, int16_t element) {
     if (queue->size >= QUEUE_SIZE) {
         for (int i = 0; i < QUEUE_SIZE - 1; i++) {
@@ -197,20 +172,6 @@ void enqueue(CircularQueue *queue, int16_t element) {
     // cpxPrintToConsole(LOG_TO_CRTP,"queue->rear:%hd\n",queue->rear);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -240,101 +201,9 @@ void enqueue10(CircularQueue10 *q, int16_t data) {
     q->size++;
 }
 
-// void dequeue(CircularQueue *q, float data) {
-//     if (isEmpty(q)) {
-//         printf("Queue is empty. Cannot dequeue an item.\n");
-//         return;
-//     }
-   
-//     data = q->data[q->front];
-    
-//     q->front = (q->front + 1) % QUEUE_SIZE;
-//     q->size--;
-// }
-
-
-// 通过蝴蝶算法实现的FFT
-// void FFT(Complex* x, int N) {
-//     if (N <= 1) return;
-//     Complex even[N/2], odd[N/2];
-//     for (int i = 0; i < N / 2; ++i) {
-//         even[i] = x[2*i];
-//         odd[i] = x[2*i+1];
-//     }
-//     FFT(even, N/2);
-//     FFT(odd, N/2);
-//     for (int k = 0; k < N / 2; ++k) {
-//         double angle = -2 * PI * k / N;
-//         Complex t = {cos(angle), sin(angle)};
-//         t.real *= odd[k].real;
-//         t.imag *= odd[k].imag;
-//         x[k].real = even[k].real + t.real;
-//         x[k].imag = even[k].imag + t.imag;
-//         x[k+N/2].real = even[k].real - t.real;
-//         x[k+N/2].imag = even[k].imag - t.imag;
-//     }
-// }
-
-
-// void FFT(Complex* x, int N) {
-//     // int i, j, k;
-//     int n = 1;  // 每次蝶形操作处理的数据点数量，从1开始
-//     int m;      // 蝶形操作的组号
-//     // int step;   // 步长
-
-//     // 计算蝶形操作的总阶数
-//     while (n < N) {
-//         n *= 2;
-//     }
-//     m = N / 2;
-
-    // 重新排列输入序列
-    // for (i = 0; i < N; ++i) {
-    //     if (i < m) {
-    //         j = i * 2;
-    //     } else {
-    //         j = (i - m) * 2 + 1;
-    //     }
-    //     if (j < i) {
-    //         Complex temp = x[i];
-    //         x[i] = x[j];
-    //         x[j] = temp;
-    //     }
-    // }
-
-    // 执行蝶形操作
-    // for (step = 2; step <= N; step *= 2) {
-    //     double angle = -2 * PI / step;
-    //     Complex w = {cos(angle), sin(angle)};
-    //     Complex u = {1.0, 0.0};
-
-    //     for (m = 0; m < step / 2; ++m) {
-    //         for (k = m; k < N; k += step) {
-    //             int j = k + step / 2;
-    //             Complex t = {
-    //                 u.real * x[j].real - u.imag * x[j].imag,
-    //                 u.imag * x[j].real + u.real * x[j].imag
-    //             };
-    //             x[j].real = x[k].real - t.real;
-    //             x[j].imag = x[k].imag - t.imag;
-    //             x[k].real += t.real;
-    //             x[k].imag += t.imag;
-    //         }
-    //         Complex temp = {
-    //             u.real * w.real - u.imag * w.imag,
-    //             u.imag * w.real + u.real * w.imag
-    //         };
-    //         u = temp;
-    //     }
-    // }
-// }
 
 // 计算短时傅里叶变换（STFT）
 int STFTandextraction(CircularQueue* queue, int sampleRate, int segmentLength, int overlapPoints) {
-    // int numSegments = 1;
-    // int numFreqBins = 101;
-    // double timeIncrement = 0.01;
-
     int* signal = (int*)malloc(segmentLength*sizeof(int));
     int index = queue->front;
     int i=0;
@@ -406,86 +275,13 @@ int STFTandextraction(CircularQueue* queue, int sampleRate, int segmentLength, i
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // double* stftResult = (double*)malloc(numFreqBins * sizeof(double));
-  
-//     // 将傅里叶变换结果的幅度存储到STFT结果数组中
-    // for (int j = 0; j < numFreqBins; ++j) {
-    //     stftResult[j] = sqrt(spectrum[j].real * spectrum[j].real + spectrum[j].imag * spectrum[j].imag);
-    // }
-    
-    // free(stftResult);
-    
-//     free(signal);
-//     return stftResult;
-
-    // Select 6-8Hz
-    // int sumpower = (f1[12]*f1[12]+f1[13]*f1[13]+f1[14]*f1[14]+f1[15]*f1[15]+f1[16]*f1[16])/1e6;
-    // int sumpower=0;
-    // for (int j = 12; j < 17; ++j) {
-    //     sumpower += (spectrum[j].real * spectrum[j].real + spectrum[j].imag * spectrum[j].imag)/1e6;
-    // }
-    // int sumpower=(spectrum[12].real * spectrum[12].real);
-    // +spectrum[13].real * spectrum[13].real + spectrum[13].imag * spectrum[13].imag
-    // +spectrum[14].real * spectrum[14].real + spectrum[14].imag * spectrum[14].imag
-    // +spectrum[15].real * spectrum[15].real + spectrum[15].imag * spectrum[15].imag)/1e6;
-    
-    // int* h = (int*)(malloc(sizeof(int)));
-    // uint16_t* sumpower1 = (uint16_t*)(malloc(sizeof(uint16_t)));
-    // // uint16_t sumpower1 = 234;
-    // *sumpower1 = (spectrum[12].real * spectrum[12].real
-    // +spectrum[13].real * spectrum[13].real + spectrum[13].imag * spectrum[13].imag
-    // +spectrum[14].real * spectrum[14].real + spectrum[14].imag * spectrum[14].imag
-    // +spectrum[15].real * spectrum[15].real + spectrum[15].imag * spectrum[15].imag)/1e6;
-    // *sumpower1 = 12345;
-    // DEBUG_PRINT("is entry (%u)\n", (uint16_t)565656);
-
-    // free(sumpower1);
     free(window);
     int h = 22222;
     free(spectrum);
-    
     return h;
     
 }
 
-
-
-// 读取CSV文件并将内容存储到二维数组中
-// void readCSV(const char* filename, double data[][12], int* rows, int* cols) {
-//     FILE* file = fopen(filename, "r");
-//     if (file == NULL) {
-//         printf("Error opening file %s\n", filename);
-//         exit(1);
-//     }
-
-//     char buffer[1024];
-
-//     *rows = 0;
-//     while (fgets(buffer,1024, file)) {
-//         char* token = strtok(buffer, ",");
-//         int col = 0;
-//         while (token != NULL) {
-//             data[*rows][col++] = atof(token);
-//             token = strtok(NULL, ",");
-//         }
-//         *cols = col;
-//         (*rows)++;
-//     }
-
-//     fclose(file);
-// }
 
 
 void cfar_so(CircularQueueCFAR *queue, int N, int pro_N, double PAD, double *XT, int *target_s2) {
@@ -496,7 +292,6 @@ void cfar_so(CircularQueueCFAR *queue, int N, int pro_N, double PAD, double *XT,
     int index = queue->front-1;
     int i=0;
     while (i<50) {
-        // printf("%d ", queue->rear);
         index = (index + 1) % 61;
         left_N[i] = queue->data[index];
         i++;
@@ -506,16 +301,11 @@ void cfar_so(CircularQueueCFAR *queue, int N, int pro_N, double PAD, double *XT,
 
     double Z = average(left_N, 50);
     *XT = Z * alpha;
-    // printf("###%d\n",queue->data[queue->rear-1]);
     if (queue->data[queue->rear-1] > Z * alpha) {
         
         *target_s2 = 1;
        
     }
-    // }
-
-    // Store the number of targets found
-
 }
 
 
@@ -583,20 +373,9 @@ void appMain() {
     initQueue(motor2_1_dataQueue);
     initQueue(accX_dataQueue);
     initQueue(motor3_1_dataQueue);
-    // double signal[4272] = {0};
-    // double signal_accZ[200] = {0};
-    // double signal_gyroY[200] = {0};
-    // double signal_motor2_1[200] = {0};
-    // double signal_accX[200] = {0};
-    // double signal_motor3_1[200] = {0};
-
-
-    // FILE* stft_file = fopen("stft.csv", "w");
-    // FILE* fa_file = fopen("fa.csv", "w");
-
     DEBUG_PRINT("initial sucess\n");
 
-    // for(int j=150; j<4272-199; j++){
+
     while(1){
     //     // !!! Replace following rows with LogGet() function
         vTaskDelay(M2T(200));
