@@ -13,7 +13,7 @@ current_datetime = datetime.datetime.now()
 datetime_string = current_datetime.strftime("%m%d-%H%M")
 
 
-URI = 'radio://0/80/2M/E7E7E7E707'
+URI = 'radio://0/80/2M/E7E7E7E708'
 
 # Only output errors from the logging framework
 logging.basicConfig(level=logging.ERROR)
@@ -106,28 +106,39 @@ if __name__ == '__main__':
 
                 if keyboard.is_pressed('up'):
                     # Move forward
-                    print('Moving forward 0.1m')
-                    mc.forward(0.1)
+                    print('Moving forward 0.2m')
+                    mc.forward(0.2)
                 elif keyboard.is_pressed('down'):
                     # Move backward
-                    print('Moving backward 0.1m')
-                    mc.back(0.1)
+                    print('Moving backward 0.2m')
+                    mc.back(0.2)
                 elif keyboard.is_pressed('f'):
                     # Move forward
                     print('Moving forward 2m')
-                    mc.forward(2,0.35)
+                    mc.forward(2,0.4)
                 elif keyboard.is_pressed('b'):
                     # Move backward
-                    print('Moving backward 2m')
-                    mc.back(2,0.35)
+                    print('Moving backward 1.2m')
+                    mc.back(1.5,0.45)
+
+                elif keyboard.is_pressed('l'):
+                    # Move backward
+                    print('Moving left 1.2m')
+                    mc.left(1.5,0.35)
+
+                elif keyboard.is_pressed('r'):
+                    # Move backward
+                    print('Moving right 1.2m')
+                    mc.right(1,0.4)
+
                 elif keyboard.is_pressed('left'):
                     # Move left
-                    print('Moving left 0.1m')
-                    mc.left(0.1)
+                    print('Moving left 0.2m')
+                    mc.left(0.2)
                 elif keyboard.is_pressed('right'):
                     # Move right
-                    print('Moving right 0.1m')
-                    mc.right(0.1)
+                    print('Moving right 0.2m')
+                    mc.right(0.2)
                 elif keyboard.is_pressed('w'):
                     # Move up
                     print('Moving up 0.1m')
@@ -186,4 +197,4 @@ if __name__ == '__main__':
                 time.sleep(0.02)
 
         except:
-            np.savetxt('/home/nuci7/project/cf2/crazyflie-firmware/control/data/imu_data_'+datetime_string+'.csv', imu_data, delimiter=',')
+            np.savetxt('/home/nuc0428/project/AirTouch/crazyflie_filter_constant/control/data/imu_data_'+datetime_string+'.csv', imu_data, delimiter=',')
