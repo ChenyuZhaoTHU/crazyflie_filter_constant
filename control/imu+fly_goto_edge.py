@@ -13,7 +13,7 @@ current_datetime = datetime.datetime.now()
 datetime_string = current_datetime.strftime("%m%d-%H%M")
 
 
-URI = 'radio://0/80/2M/E7E7E7E705'
+URI = 'radio://0/80/2M/E7E7E7E7E7'
 
 # Only output errors from the logging framework
 logging.basicConfig(level=logging.ERROR)
@@ -156,12 +156,14 @@ if __name__ == '__main__':
                     mc.hove()
                 elif keyboard.is_pressed('o'):
 
-                    flight_time = 2.0
+                    flight_time = 3.0
 
                     commander = scf.cf.high_level_commander
 
-                    commander.go_to(0, 0, 1.2, 0, flight_time, relative=False)
+                    commander.go_to(1.8, 1.8, 0.85, 0, flight_time, relative=False)
                     time.sleep(flight_time)
+                    # mc.land()
+                    break
 
                 elif keyboard.is_pressed('p'):
                     flight_time = 8.0
