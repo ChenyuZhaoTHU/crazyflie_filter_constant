@@ -76,6 +76,10 @@ float Fa = 0.0;
 // 复数结构体
 
 
+// Callback that is called when a CPX packet arrives
+static void cpxPacketCallback(const CPXPacket_t* cpxRx);
+static CPXPacket_t txPacket;
+
 typedef struct {
     double data[RAWDATA_SIZE];  // 二维数组
     int front;
@@ -307,13 +311,18 @@ void appMain() {
     DEBUG_PRINT("Hello! I am the stm_gap8_cpx app\n");
     // Register a callback for CPX packets.
     // Packets sent to destination=CPX_T_STM32 and function=CPX_F_APP will arrive here
-    // cpxRegisterAppMessageHandler(cpxPacketCallback);
+    cpxRegisterAppMessageHandler(cpxPacketCallback);
+
+
+    int N = 100;
+    int pro_N = 20;
+    double PAD = 1e-4;
+    double XT = 0.0;
     
-    // 输出fusion_results
     CircularQueueCFAR* fusion_dataQueue=(CircularQueueCFAR*)malloc(sizeof(CircularQueueCFAR));
     initQueueCFAR(fusion_dataQueue);
-    CircularQueue10* Fa_dataQueue = (CircularQueue10*)malloc(sizeof(CircularQueue10));
-    initQueue10(Fa_dataQueue);
+    CircularQueueCFAR* Fa_dataQueue = (CircularQueueCFAR*)malloc(sizeof(CircularQueueCFAR));
+    initQueueCFAR(Fa_dataQueue);
 
     // 输入信号
     CircularQueue* accZ_dataQueue = (CircularQueue*)malloc(sizeof(CircularQueue));
@@ -363,46 +372,50 @@ void appMain() {
         //  Section 4.3 Cascaded Cross-Spectrum Feature Fusion (CCS-FF).
         int fusion_result = mag1*mag2*mag3*mag4*mag5;
 
+        
 
-        // ****************** Section 5 Ground Effect Profiling from Motors and IMU ****************
+
+        // Send fusion data to GAP8 on Ai-Deck
+        cpxInitRoute(CPX_T_STM32, CPX_T_GAP8, CPX_F_APP, &txPacket.route);
+        txPacket.data[0] = fusion_result;
+        txPacket.dataLength = 1;
+
+        cpxSendPacketBlocking(&txPacket);
+
+        // DEBUG_PRINT("send pkg to gap8 (%u)\n", (uint8_t)fusion_result);
+
+
+
+
+
+        // ****************** Section 5 Physical Knowledge-Aided Light Weight Predictor ****************
         //
-        // Section 5.1 Physical Knowledge-Aided Light Weight Predictor
+        // Section 5.1 Aerodynamiccs-Informed Double Phase Physical Filter
         // Calculate the disturbance force in Z axis
         int Fa_raw = s1_calFa(accZ, motor1/65535,motor2/65535, motor3/65535, motor4/65535);
-        
+        // enqueue10(Fa_dataQueue,Fa_raw);
+        // int Fa_filtered = average((double*)Fa_dataQueue->data, 10);
 
-
-
+        // // // CFAR detection  Part
+        enqueueCFAR(Fa_dataQueue, Fa_raw);
         
-        // // CFAR detection  Part
-        // enqueueCFAR(fusion_dataQueue, fusion_result);
-        // int N = 100;
-        // int pro_N = 20;
-        // double PAD = 1e-4;
-        // double XT = 0.0;
-        uint8_t target_s1 = 0;
-        // uint8_t* target_s2 = 0;
+        // uint8_t target_s1 = 0;
+        uint8_t* target_Fa = 0;
         
-        // cfar_so(fusion_dataQueue, N, pro_N, PAD, &XT, target_s2);
+        cfar_so(Fa_dataQueue, N, pro_N, PAD, &XT, target_Fa);
 
        
-        
-        
-        enqueue10(Fa_dataQueue,Fa_raw);
-        int Fa_filtered = average((double*)Fa_dataQueue->data, 10);
-        
-        if(Fa_filtered>30){
-            target_s1 = 1;
-        }
-
         // uint8_t is_entry = target_s1 * (*target_s2);
         
         
-        DEBUG_PRINT("is entry (%u)\n", (uint8_t)target_s1);
+        // DEBUG_PRINT("is entry (%u)\n", (uint8_t)*target_Fa);
 
     }
 
     
-
+    
 
 }
+static void cpxPacketCallback(const CPXPacket_t* cpxRx) {
+        DEBUG_PRINT("Got packet from GAP8 (%u)\n", cpxRx->data[0]);
+        }

@@ -63,12 +63,12 @@ void rangeEnqueueDownRangeInEstimator(float distance, float stdDev, uint32_t tim
 
 
 
-  float desk_height = 0.75;
+  float desk_height = 0.70;
   // on board
-  if ((distance - pre_zrange)<(float)(-0.600 ) ){
+  if ((distance - pre_zrange)<(float)(-0.300 ) ){
     onboard = true;
   }
-  else if((distance - pre_zrange)>(float)(+0.600)){
+  else if((distance - pre_zrange)>(float)(+0.300)){
     onboard = false;
   }
 
